@@ -1,9 +1,10 @@
 package org.saud.peoplehub.exception;
 
-public class UserAlreadyExistsException extends RuntimeException {
+import jakarta.ws.rs.core.Response;
 
-    public UserAlreadyExistsException(String message) {
-        super(message);
+public class UserAlreadyExistsException extends ApplicationException {
+
+     public UserAlreadyExistsException(String message) {
+        super(message, Response.Status.CONFLICT.getStatusCode());
     }
-    
 }

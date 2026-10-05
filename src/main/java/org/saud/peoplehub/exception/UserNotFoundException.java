@@ -1,8 +1,10 @@
 package org.saud.peoplehub.exception;
 
-public class UserNotFoundException extends RuntimeException {
+import jakarta.ws.rs.core.Response;
+
+public class UserNotFoundException extends ApplicationException {
 
     public UserNotFoundException(String message) {
-        super(message);
+        super(message, Response.Status.NOT_FOUND.getStatusCode());
     }
 }
