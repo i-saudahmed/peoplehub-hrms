@@ -1,4 +1,4 @@
-package org.saud.mapper;
+package org.saud.peoplehub.mapper;
 
 import org.saud.peoplehub.dto.response.UserResponse;
 import org.saud.peoplehub.entity.User;
