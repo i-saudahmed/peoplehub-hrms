@@ -5,6 +5,7 @@ import org.saud.peoplehub.dto.request.user.CreateUserRequest;
 import org.saud.peoplehub.dto.response.UserResponse;
 import org.saud.peoplehub.entity.User;
 import org.saud.peoplehub.exception.UserAlreadyExistsException;
+import org.saud.peoplehub.exception.UserNotFoundException;
 import org.saud.peoplehub.mapper.UserMapper;
 import org.saud.peoplehub.repository.UserRepository;
 import org.saud.peoplehub.util.PasswordService;
@@ -79,6 +80,21 @@ public class UserService {
                                 user.getRole());
                 return mapper.toResponse(user);
 
+        }
+
+        public UserResponse getUserByUsernameOrEmailOrId(String query) {
+                LOG.infof("Searching user by username, email, or id=%s", query);
+
+                User user = userRepository.findByUsernameOrEmailOrId(query).orElseThrow(() -> {
+                        LOG.warnf("User not found with username, email, or id=%s", query);
+
+                        return new UserNotFoundException(
+                                        "User not found with username or email or id : " + query);
+                });
+
+                LOG.infof("User found successfully with id=%s", user.getId());
+
+                return  mapper.toResponse(user);
         }
 
 }

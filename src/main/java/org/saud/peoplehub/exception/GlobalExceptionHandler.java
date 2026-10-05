@@ -32,12 +32,12 @@ public class GlobalExceptionHandler implements ExceptionMapper<ApplicationExcept
         );
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(Response.Status.CONFLICT.getStatusCode());
+        errorResponse.setStatus(exception.getStatus());
         errorResponse.setMessage(exception.getMessage());
         errorResponse.setPath(uriInfo.getPath());
         errorResponse.setTimestamp(LocalDateTime.now());
 
-        return Response.status(Response.Status.CONFLICT).entity(errorResponse).build();
+        return Response.status(exception.getStatus()).entity(errorResponse).build();
 
     }
 
