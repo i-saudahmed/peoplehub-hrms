@@ -64,6 +64,4 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 
-
-
 }
