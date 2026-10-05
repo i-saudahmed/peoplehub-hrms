@@ -1,7 +1,10 @@
 package org.saud.peoplehub.service;
 
+import java.util.List;
+
 import org.jboss.logging.Logger;
 import org.saud.peoplehub.dto.request.user.CreateUserRequest;
+import org.saud.peoplehub.dto.response.PageResponse;
 import org.saud.peoplehub.dto.response.UserResponse;
 import org.saud.peoplehub.entity.User;
 import org.saud.peoplehub.exception.UserAlreadyExistsException;
@@ -10,6 +13,8 @@ import org.saud.peoplehub.mapper.UserMapper;
 import org.saud.peoplehub.repository.UserRepository;
 import org.saud.peoplehub.util.PasswordService;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -94,7 +99,31 @@ public class UserService {
 
                 LOG.infof("User found successfully with id=%s", user.getId());
 
-                return  mapper.toResponse(user);
+                return mapper.toResponse(user);
+        }
+
+        public PageResponse<UserResponse> getAllUsers(int page, int size) {
+
+                LOG.infof("Fetching users. page=%d, size=%d", page, size);
+
+                PanacheQuery<User> query = userRepository.findAll();
+
+                query.page(Page.of(page, size));
+
+                List<User> users = query.list();
+
+                long totalElements = query.count();
+
+                int totalPages = (int) Math.ceil((double) totalElements / size);
+
+                List<UserResponse> responses = users.stream()
+                                .map(user -> mapper.toResponse(user))
+                                .toList();
+
+                LOG.infof("Users fetched successfully. page=%d, size=%d, returned=%d, total=%d", page, size,
+                                responses.size(), totalElements);
+
+                return new PageResponse<>(responses,page,size,totalElements,totalPages);
         }
 
 }
