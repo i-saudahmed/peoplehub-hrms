@@ -2,13 +2,6 @@ package org.saud.peoplehub.dto.response;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-@AllArgsConstructor 
 public class PageResponse<T> {
 
     private List<T> content;
@@ -16,5 +9,69 @@ public class PageResponse<T> {
     private int size;
     private long totalElements;
     private int totalPages;
+
+    public PageResponse(List<T> content, int page, int size, long totalElements, int totalPages) {
+        this.content = content;
+        this.page = page;
+        this.size = size;
+        this.totalElements = totalElements;
+        this.totalPages = totalPages;
+    }
+
+    public PageResponse() {
+    }
+
+    public List<T> getContent() {
+        return content;
+    }
+
+    public void setContent(List<T> content) {
+        this.content = content;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public long getTotalElements() {
+        return totalElements;
+    }
+
+    public void setTotalElements(long totalElements) {
+        this.totalElements = totalElements;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("PageResponse{");
+        sb.append("content=").append(content);
+        sb.append(", page=").append(page);
+        sb.append(", size=").append(size);
+        sb.append(", totalElements=").append(totalElements);
+        sb.append(", totalPages=").append(totalPages);
+        sb.append('}');
+        return sb.toString();
+    }
 
 }

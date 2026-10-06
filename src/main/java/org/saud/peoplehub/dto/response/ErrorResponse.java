@@ -1,19 +1,25 @@
 package org.saud.peoplehub.dto.response;
 
 import java.time.LocalDateTime;
-
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-
-@AllArgsConstructor
-@NoArgsConstructor 
 public class ErrorResponse {
 
     private int status;
     private String message;
     private String path;
     private LocalDateTime timestamp;
+
+    public ErrorResponse() {
+    }
+
+    public ErrorResponse(String message, String path, int status, LocalDateTime timestamp) {
+        this.message = message;
+        this.path = path;
+        this.status = status;
+        this.timestamp = timestamp;
+    }
+
+
+
     public int getStatus() {
         return status;
     }
