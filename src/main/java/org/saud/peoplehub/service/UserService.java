@@ -5,6 +5,7 @@ import java.util.List;
 import org.jboss.logging.Logger;
 import org.saud.peoplehub.dto.request.user.CreateUserRequest;
 import org.saud.peoplehub.dto.request.user.UpdateUserRequest;
+import org.saud.peoplehub.dto.request.user.UpdateUserStatusRequest;
 import org.saud.peoplehub.dto.response.PageResponse;
 import org.saud.peoplehub.dto.response.UserResponse;
 import org.saud.peoplehub.entity.User;
@@ -166,11 +167,32 @@ public class UserService {
                 if (request.getRole() != null) {
                         user.setRole(request.getRole());
                 }
-
                 LOG.infof("User updated successfully. id=%d", id);
-
                 return mapper.toResponse(user);
+        }
 
+        @Transactional 
+        public UserResponse updateUserStatus(Long id, UpdateUserStatusRequest request) {
+
+
+                LOG.infof(
+                        "Updating user status. id=%d, active=%s",
+                        id,
+                        request.getActive()
+                );
+
+                User user = userRepository.findByIdOptional(id).orElseThrow(() -> {
+                        LOG.warnf("User update failed. User not found. id=%d", id);
+                        return new UserNotFoundException("User not found with id: " + id);
+                });
+
+                user.setActive(request.getActive());
+              
+                LOG.infof(
+                        "User status updated successfully. id=%d, active=%s",
+                        id,
+                        request.getActive()
+    );                return mapper.toResponse(user);
         }
 
 }
