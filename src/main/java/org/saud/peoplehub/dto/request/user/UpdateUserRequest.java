@@ -10,6 +10,17 @@ public class UpdateUserRequest {
     
     private Role role;
 
+    
+
+    public UpdateUserRequest() {
+    }
+
+    public UpdateUserRequest(String username, String email, Role role) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+    }
+
     public String getUsername() {
         return username;
     }

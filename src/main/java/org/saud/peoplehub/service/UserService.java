@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jboss.logging.Logger;
 import org.saud.peoplehub.dto.request.user.CreateUserRequest;
+import org.saud.peoplehub.dto.request.user.UpdateUserRequest;
 import org.saud.peoplehub.dto.response.PageResponse;
 import org.saud.peoplehub.dto.response.UserResponse;
 import org.saud.peoplehub.entity.User;
@@ -123,7 +124,53 @@ public class UserService {
                 LOG.infof("Users fetched successfully. page=%d, size=%d, returned=%d, total=%d", page, size,
                                 responses.size(), totalElements);
 
-                return new PageResponse<>(responses,page,size,totalElements,totalPages);
+                return new PageResponse<>(responses, page, size, totalElements, totalPages);
+        }
+
+        @Transactional
+        public UserResponse updateUser(Long id, UpdateUserRequest request) {
+
+                LOG.infof("Starting user update. id=%d", id);
+
+                User user = userRepository.findByIdOptional(id).orElseThrow(() -> {
+                        LOG.warnf("User update failed. User not found. id=%d", id);
+                        return new UserNotFoundException("User not found with id: " + id);
+                });
+
+                userRepository.findByUsername(request.getUsername())
+                                .filter(existingUser -> !existingUser.getId().equals(id))
+                                .ifPresent(existingUser -> {
+                                        LOG.warnf("User update failed. Username already exists. username=%s",
+                                                        request.getUsername());
+
+                                        throw new UserAlreadyExistsException("Username already exists");
+                                });
+
+                userRepository.findByEmail(request.getEmail())
+                                .filter(existingUser -> !existingUser.getId().equals(id))
+                                .ifPresent(existingUser -> {
+                                        LOG.warnf("User update failed. Email already exists. email=%s",
+                                                        request.getEmail());
+
+                                        throw new UserAlreadyExistsException("Email already exists");
+                                });
+
+                if (request.getUsername() != null) {
+                        user.setUsername(request.getUsername());
+                }
+
+                if (request.getEmail() != null) {
+                        user.setEmail(request.getEmail());
+                }
+
+                if (request.getRole() != null) {
+                        user.setRole(request.getRole());
+                }
+
+                LOG.infof("User updated successfully. id=%d", id);
+
+                return mapper.toResponse(user);
+
         }
 
 }

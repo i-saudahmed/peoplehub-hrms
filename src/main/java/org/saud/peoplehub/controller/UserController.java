@@ -1,6 +1,8 @@
 package org.saud.peoplehub.controller;
 
 import org.saud.peoplehub.dto.request.user.CreateUserRequest;
+import org.saud.peoplehub.dto.request.user.UpdateUserRequest;
+import org.saud.peoplehub.dto.request.user.UpdateUserStatusRequest;
 import org.saud.peoplehub.dto.response.PageResponse;
 import org.saud.peoplehub.dto.response.UserResponse;
 import org.saud.peoplehub.exception.InvalidRequestException;
@@ -10,8 +12,11 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 
@@ -38,7 +43,7 @@ public class UserController {
 
     @GET
     public Response getAllUsers(@QueryParam("page") @DefaultValue("0") int page,
-            @QueryParam("size") @DefaultValue ("10") int size) {
+            @QueryParam("size") @DefaultValue("10") int size) {
 
         if (page < 0) {
             throw new InvalidRequestException(
@@ -54,5 +59,18 @@ public class UserController {
 
         return Response.ok(response).build();
     }
+    
+    @PUT 
+    @Path("/{id}")
+    public Response updateUser(@PathParam("id") Long id,@Valid  UpdateUserRequest request) {
+        UserResponse response = userService.updateUser(id, request);
+        return Response.ok(response).build();
+    }
 
+    @PATCH
+    @Path("/{id}/status")
+    public Response updateUserStatus(@PathParam("id") Long id, @Valid UpdateUserStatusRequest request) {
+        UserResponse response = userService.updateUserStatus(id, request);
+        return Response.ok(response).build();
+    }
 }
