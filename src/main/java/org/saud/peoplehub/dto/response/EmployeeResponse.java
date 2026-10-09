@@ -1,6 +1,5 @@
 package org.saud.peoplehub.dto.response;
 
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -8,7 +7,6 @@ import org.saud.peoplehub.entity.Employee;
 import org.saud.peoplehub.entity.Employee.EmploymentType;
 
 import jakarta.persistence.Column;
-
 
 public class EmployeeResponse {
 
@@ -130,7 +128,6 @@ public class EmployeeResponse {
         this.joinDate = joinDate;
     }
 
-
     public Long getDepartmentId() {
         return departmentId;
     }
@@ -209,7 +206,5 @@ public class EmployeeResponse {
     public void setStatus(Employee.Status status) {
         this.status = status;
     }
-    
-    
 
 }
