@@ -4,7 +4,10 @@ package org.saud.peoplehub.dto.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.saud.peoplehub.entity.Employee;
 import org.saud.peoplehub.entity.Employee.EmploymentType;
+
+import jakarta.persistence.Column;
 
 
 public class EmployeeResponse {
@@ -25,7 +28,7 @@ public class EmployeeResponse {
 
     private LocalDate joinDate;
 
-    private String status;
+    private Employee.Status status;
 
     private Long departmentId;
 
@@ -34,9 +37,10 @@ public class EmployeeResponse {
     private Long managerId;
 
     private String managerName;
-
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public EmployeeResponse() {
@@ -44,7 +48,7 @@ public class EmployeeResponse {
 
     public EmployeeResponse(LocalDateTime createdAt, Long departmentId, String departmentName, String designation,
             String email, EmploymentType employmentType, String firstName, Long id, LocalDate joinDate, String lastName,
-            Long managerId, String managerName, String phone, String status, LocalDateTime updatedAt) {
+            Long managerId, String managerName, String phone, Employee.Status status, LocalDateTime updatedAt) {
         this.createdAt = createdAt;
         this.departmentId = departmentId;
         this.departmentName = departmentName;
@@ -126,13 +130,6 @@ public class EmployeeResponse {
         this.joinDate = joinDate;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public Long getDepartmentId() {
         return departmentId;
@@ -203,6 +200,14 @@ public class EmployeeResponse {
         sb.append(", updatedAt=").append(updatedAt);
         sb.append('}');
         return sb.toString();
+    }
+
+    public Employee.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Employee.Status status) {
+        this.status = status;
     }
     
     

@@ -1,6 +1,7 @@
 package org.saud.peoplehub.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,19 +14,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "employees")
 public class Employee {
-
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
 
     public enum EmploymentType {
         FULL_TIME, PART_TIME, CONTRACT, INTERN
@@ -47,6 +42,8 @@ public class Employee {
 
     @Column(name = "last_name", nullable = false, length = 100)
     public String lastName;
+
+    private String email;
 
     @Column(length = 30)
     public String phone;
@@ -75,6 +72,10 @@ public class Employee {
     @JoinColumn(name = "user_id", unique = true)
     public User user;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     // ? many employees to 1 dept
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "department_id")
@@ -88,22 +89,26 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(Long id, String employeeCode, String firstName, String lastName, String phone, String address,
-            LocalDate dateOfBirth, EmploymentType employmentType, LocalDate joinDate, Status status, User user,
-            Employee manager, String designation) {
+    public Employee(Long id, String employeeCode, String firstName, String lastName, String email, String phone,
+            String address, LocalDate dateOfBirth, String designation, EmploymentType employmentType,
+            LocalDate joinDate, Status status, User user, LocalDateTime createdAt, LocalDateTime updatedAt,
+            Employee manager) {
         this.id = id;
         this.employeeCode = employeeCode;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.phone = phone;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
+        this.designation = designation;
         this.employmentType = employmentType;
         this.joinDate = joinDate;
         this.status = status;
         this.user = user;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.manager = manager;
-        this.designation = designation;
     }
 
     public Long getId() {
@@ -200,6 +205,50 @@ public class Employee {
 
     public void setManager(Employee manager) {
         this.manager = manager;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
 }
